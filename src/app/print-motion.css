@@ -1,0 +1,103 @@
+/* Film, facing pages and their captions are the three moving surfaces. */
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-motion] {
+    --exposure-time: 720ms;
+    --open-time: 660ms;
+    --leaf-delay: 95ms;
+    --caption-delay: 140ms;
+    --caption-time: 380ms;
+    --caption-lift: 4px;
+    --leaf-offset: 6px;
+    --leaf-angle: 5deg;
+  }
+
+  .exposure-surface {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .exposure-surface[data-motion-play]::after,
+  [data-motion="print-exposure"][data-motion-play] > .exposure-surface::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(115deg, #1b241d 15%, #362d24 90%);
+    opacity: 0;
+    animation: print-exposure var(--exposure-time) var(--ease) backwards;
+  }
+
+  .exposure-surface .enlarge {
+    z-index: 2;
+  }
+
+  [data-motion="album-spread"][data-motion-play] > figure {
+    --leaf-start: calc(-1 * var(--leaf-offset));
+    --leaf-rotation: calc(-1 * var(--leaf-angle));
+    --hinge: 100% 50%;
+    --start: 0ms;
+  }
+
+  [data-motion="album-spread"][data-motion-play] > figure:nth-child(2) {
+    --leaf-start: var(--leaf-offset);
+    --leaf-rotation: var(--leaf-angle);
+    --hinge: 0% 50%;
+    --start: var(--leaf-delay);
+  }
+
+  [data-motion="album-spread"][data-motion-play] > figure > :is(img, .print) {
+    transform-origin: var(--hinge);
+    animation: spread-settle var(--open-time) var(--ease) var(--start) backwards;
+  }
+
+  [data-motion="print-exposure"][data-motion-play] > figcaption,
+  [data-motion="album-spread"][data-motion-play] > figure > figcaption,
+  [data-motion="margin-caption"][data-motion-play] {
+    animation: print-caption var(--caption-time) var(--ease)
+      calc(var(--caption-delay) + var(--start, 0ms)) backwards;
+  }
+
+  @keyframes print-exposure {
+    from {
+      opacity: 0.46;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes spread-settle {
+    from {
+      transform: perspective(1000px) translateX(var(--leaf-start))
+        rotateY(var(--leaf-rotation));
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes print-caption {
+    from {
+      opacity: 0.78;
+      transform: translateY(var(--caption-lift));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    [data-motion] {
+      --exposure-time: 480ms;
+      --open-time: 440ms;
+      --leaf-delay: 65ms;
+      --caption-delay: 85ms;
+      --caption-time: 270ms;
+      --caption-lift: 2px;
+      --leaf-offset: 3px;
+      --leaf-angle: 3deg;
+    }
+  }
+}

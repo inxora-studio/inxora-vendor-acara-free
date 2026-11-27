@@ -1,0 +1,13 @@
+:root {
+  --paper: #f7f6f0;
+  --ink: #20251f;
+  --muted: #535d54;
+  --forest: #263e32;
+  --warm: #daca9c;
+  --line: #c8cdc1;
+  --serif: "Cormorant Garamond", Georgia, serif;
+  --body: Arial, Helvetica, sans-serif;
+  --measure: 84rem;
+  --turn: 220ms;
+  --ease: cubic-bezier(0.2, 0.72, 0.28, 1);
+}
